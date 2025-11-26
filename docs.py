@@ -10,9 +10,15 @@ import subprocess
 import sys
 from pathlib import Path
 
+# Repository root (parent directory of this script)
+REPO_ROOT = Path(__file__).resolve().parent.parent
+
 
 def main():
     """Run documentation build using sphinx-polyversion."""
+    # Change to repository root directory
+    os.chdir(REPO_ROOT)
+    
     # Parse command line arguments
     parser = argparse.ArgumentParser(
         description="Build documentation for this project."
@@ -25,7 +31,7 @@ def main():
     print("Building documentation with sphinx-polyversion...", file=sys.stderr)
 
     # Check if virtual environment is active
-    if not Path(".venv").exists():
+    if not (REPO_ROOT / ".venv").exists():
         print("No virtual environment found. Creating one...", file=sys.stderr)
         subprocess.run(["uv", "venv"], check=True)
 
