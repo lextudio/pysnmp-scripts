@@ -8,8 +8,15 @@ import argparse
 import os
 import subprocess
 import sys
-import tomllib
 from pathlib import Path
+
+try:
+    import tomllib
+except ImportError:
+    try:
+        import tomli as tomllib
+    except ImportError:
+        tomllib = None
 
 # Repository root (parent directory of this script)
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -18,7 +25,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 def get_package_name():
     """Auto-detect package name from pyproject.toml."""
     pyproject_path = REPO_ROOT / "pyproject.toml"
-    if pyproject_path.exists():
+    if pyproject_path.exists() and tomllib is not None:
         try:
             with open(pyproject_path, "rb") as f:
                 data = tomllib.load(f)
