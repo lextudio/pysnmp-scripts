@@ -1,0 +1,36 @@
+#!/usr/bin/env python3
+"""
+Script to build Python packages for pysmi.
+Equivalent to Build-Packages.ps1
+"""
+
+import os
+import shutil
+import subprocess
+from pathlib import Path
+
+# Repository root (parent directory of this script)
+REPO_ROOT = Path(__file__).resolve().parent.parent
+
+
+def main():
+    """Main function to build packages."""
+    # Change to repository root directory
+    os.chdir(REPO_ROOT)
+    
+    # Check if the dist directory exists and remove it
+    if os.path.isdir("dist"):
+        print("Removing existing dist directory...")
+        shutil.rmtree("dist")
+    else:
+        print("dist directory not found. Skipping removal.")
+
+    # Build the packages
+    print("Building packages...")
+    subprocess.run(["uv", "build"], check=True)
+
+    print("Build process completed.")
+
+
+if __name__ == "__main__":
+    main()
